@@ -251,7 +251,7 @@ textarea::placeholder { color: var(--text3); }
       <div class="logo-circle">🍽</div>
       <h1>كيف كانت تجربتك؟</h1>
       <p>رأيك يهمنا ويساعدنا نتحسن لك</p>
-      <div class="branch-badge" id="branch-label">الفرع 1</div>
+      <div class="branch-badge" id="branch-label">AVINDAR LOUNGE</div>
     </div>
 
     <div class="progress-wrap">
@@ -357,7 +357,8 @@ const answers = { overall: 0, food: 0, speed: null, liked: [], nps: 0, comment: 
 
 const params = new URLSearchParams(location.search);
 const branch = params.get('branch') || '1';
-document.getElementById('branch-label').textContent = 'الفرع ' + branch;
+const BRANCH_NAMES = {'1':'AVINDAR LOUNGE','2':'AVINDAR OLD TOWEN'};
+document.getElementById('branch-label').textContent = BRANCH_NAMES[branch] || 'الفرع ' + branch;
 
 function setStar(key, val) {
   answers[key] = val;
@@ -414,7 +415,7 @@ function submitReview() {
 
   answers.comment = document.getElementById('comment').value.trim();
   answers.branch = branch;
-  answers.date = new Date().toLocaleString('en-US');
+  answers.date = new Date().toLocaleString('ar-SA');
 
   document.getElementById('sending-overlay').style.display = 'flex';
 
