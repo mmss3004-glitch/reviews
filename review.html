@@ -3,167 +3,348 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>نتائج تقييم العملاء</title>
+<title>قيّم تجربتك</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --green: #1e6b3a; --green-light: #e8f5ee; --green-mid: #2d8a50;
-  --text: #1a1814; --text2: #5a5650; --text3: #9a9590;
-  --border: #e4e0d8; --bg: #f8f6f2; --surface: #ffffff;
-  --radius: 14px; --radius-sm: 9px;
-  --amber: #7a4a00; --amber-light: #fdf0db;
-  --red: #7a1a1a; --red-light: #fde8e8;
-  --blue: #1a3a5c; --blue-light: #e6eef5;
+  --green: #1e6b3a;
+  --green-light: #e8f5ee;
+  --green-mid: #2d8a50;
+  --text: #1a1814;
+  --text2: #5a5650;
+  --text3: #9a9590;
+  --border: #e4e0d8;
+  --bg: #f8f6f2;
+  --surface: #ffffff;
+  --radius: 16px;
+  --radius-sm: 10px;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+body {
+  font-family: 'Tajawal', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 24px 16px 48px;
+}
+.container { max-width: 480px; margin: 0 auto; }
 
-.sidebar { width: 210px; background: var(--surface); border-left: 1px solid var(--border); padding: 22px 14px; position: fixed; top: 0; right: 0; bottom: 0; display: flex; flex-direction: column; gap: 4px; z-index: 10; overflow-y: auto; }
-.logo { font-size: 16px; font-weight: 800; padding: 6px 10px 18px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
-.logo span { color: var(--green); }
-.nav-btn { font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 500; padding: 9px 12px; border-radius: var(--radius-sm); border: none; background: none; cursor: pointer; color: var(--text2); text-align: right; width: 100%; display: flex; align-items: center; gap: 8px; transition: all 0.14s; }
-.nav-btn:hover { background: var(--bg); color: var(--text); }
-.nav-btn.active { background: var(--green-light); color: var(--green); font-weight: 700; }
+.header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.logo-circle {
+  width: 64px; height: 64px;
+  background: var(--green);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 14px;
+  font-size: 28px;
+}
+.header h1 { font-size: 22px; font-weight: 800; color: var(--text); }
+.header p { font-size: 14px; color: var(--text2); margin-top: 4px; }
 
-.main { margin-right: 210px; padding: 28px; max-width: 860px; }
-.page { display: none; } .page.active { display: block; }
-.page-title { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
-.page-sub { font-size: 13px; color: var(--text3); margin-bottom: 22px; }
+.branch-badge {
+  display: inline-block;
+  background: var(--green-light);
+  color: var(--green);
+  font-size: 13px; font-weight: 700;
+  padding: 5px 16px;
+  border-radius: 99px;
+  margin-top: 8px;
+}
 
-.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 22px; }
-.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
-.stat-lbl { font-size: 11px; color: var(--text3); font-weight: 500; margin-bottom: 4px; }
-.stat-val { font-size: 26px; font-weight: 800; }
-.stat-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 14px;
+}
 
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 14px; }
-.card-title { font-size: 15px; font-weight: 700; margin-bottom: 14px; }
+.q-number {
+  font-size: 11px; font-weight: 700;
+  color: var(--green);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+.q-text {
+  font-size: 16px; font-weight: 700;
+  color: var(--text);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
 
-.filter-row { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; align-items: center; }
-select, .btn { font-family: 'Tajawal', sans-serif; font-size: 13px; padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; }
-.btn { font-weight: 500; transition: all 0.14s; }
-.btn:hover { background: var(--bg); }
-.btn-primary { background: var(--green); color: white; border-color: var(--green); font-weight: 700; }
-.btn-primary:hover { opacity: 0.86; }
-.btn-refresh { background: var(--blue-light); color: var(--blue); border-color: var(--blue-light); font-weight: 700; }
+.star-row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.star-btn {
+  background: none; border: none; cursor: pointer;
+  font-size: 36px; color: #ddd;
+  transition: transform 0.12s, color 0.12s;
+  padding: 4px;
+  line-height: 1;
+}
+.star-btn.active { color: #f0b429; }
+.star-btn:hover { transform: scale(1.15); }
+.star-label {
+  text-align: center;
+  font-size: 13px; font-weight: 600;
+  color: var(--text2);
+  min-height: 20px;
+  transition: color 0.2s;
+}
 
-.bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 13px; }
-.bar-label { min-width: 90px; color: var(--text2); text-align: right; }
-.bar-track { flex: 1; background: var(--bg); border-radius: 99px; height: 10px; overflow: hidden; }
-.bar-fill { height: 100%; background: var(--green); border-radius: 99px; transition: width 0.5s ease; }
-.bar-count { min-width: 30px; color: var(--text3); font-size: 12px; }
+.choices { display: flex; flex-direction: column; gap: 8px; }
+.choice-btn {
+  font-family: 'Tajawal', sans-serif;
+  font-size: 14px; font-weight: 500;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  text-align: right;
+  transition: all 0.15s;
+  display: flex; align-items: center; gap: 10px;
+}
+.choice-btn:hover { border-color: var(--green-mid); background: var(--green-light); }
+.choice-btn.selected {
+  border-color: var(--green);
+  background: var(--green-light);
+  color: var(--green);
+}
+.choice-btn .check {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  transition: all 0.15s;
+  margin-right: auto;
+}
+.choice-btn.selected .check {
+  background: var(--green);
+  border-color: var(--green);
+  color: white;
+}
 
-.review-card { padding: 14px 0; border-bottom: 1px solid var(--border); }
-.review-card:last-child { border-bottom: none; }
-.review-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
-.badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 99px; }
-.b-excellent { background: var(--green-light); color: var(--green); }
-.b-good { background: var(--blue-light); color: var(--blue); }
-.b-avg { background: var(--amber-light); color: var(--amber); }
-.b-low { background: var(--red-light); color: var(--red); }
-.review-comment { font-size: 13px; color: var(--text2); margin-top: 4px; font-style: italic; }
-.tag { font-size: 11px; padding: 3px 8px; border-radius: 99px; background: var(--bg); color: var(--text3); border: 1px solid var(--border); margin: 2px; display: inline-block; }
+.choice-btn.multi.selected {
+  border-color: var(--green);
+  background: var(--green-light);
+  color: var(--green);
+}
+.choice-btn.multi .check { border-radius: 5px; }
 
-.link-box { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; font-size: 13px; font-family: monospace; word-break: break-all; color: var(--text2); margin-bottom: 10px; }
-.wa-btn { display: flex; align-items: center; gap: 8px; width: 100%; justify-content: center; padding: 12px; font-size: 15px; font-weight: 700; background: #25D366; color: white; border: none; border-radius: var(--radius-sm); cursor: pointer; font-family: 'Tajawal', sans-serif; transition: opacity 0.2s; }
-.wa-btn:hover { opacity: 0.88; }
+textarea {
+  font-family: 'Tajawal', sans-serif;
+  font-size: 14px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  resize: none;
+  min-height: 90px;
+  transition: border-color 0.15s;
+}
+textarea:focus { outline: none; border-color: var(--green-mid); }
+textarea::placeholder { color: var(--text3); }
 
-.empty-state { text-align: center; padding: 40px; color: var(--text3); font-size: 14px; }
+.nps-row {
+  display: flex; gap: 5px; justify-content: center; flex-wrap: wrap;
+}
+.nps-btn {
+  width: 38px; height: 38px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  font-family: 'Tajawal', sans-serif;
+  font-size: 13px; font-weight: 700;
+  cursor: pointer;
+  color: var(--text2);
+  transition: all 0.15s;
+}
+.nps-btn:hover { border-color: var(--green-mid); color: var(--green); }
+.nps-btn.selected { background: var(--green); border-color: var(--green); color: white; }
+.nps-labels { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; color: var(--text3); }
 
-.branch-tabs { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
-.branch-tab { font-size: 13px; padding: 6px 14px; border-radius: 99px; border: 1px solid var(--border); cursor: pointer; color: var(--text2); background: transparent; font-family: 'Tajawal', sans-serif; font-weight: 500; transition: all 0.14s; }
-.branch-tab.active { background: var(--green); color: white; border-color: var(--green); }
+.progress-wrap { margin-bottom: 24px; }
+.progress-track { background: var(--border); border-radius: 99px; height: 4px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--green); border-radius: 99px; transition: width 0.4s ease; }
+.progress-label { font-size: 12px; color: var(--text3); margin-bottom: 6px; text-align: left; }
 
-.loading-row { display: flex; align-items: center; gap: 10px; padding: 20px; color: var(--text3); font-size: 14px; }
-.spinner { width: 20px; height: 20px; border: 2px solid var(--green-light); border-top-color: var(--green); border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
+.submit-btn {
+  width: 100%;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 16px; font-weight: 700;
+  padding: 16px;
+  background: var(--green);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: opacity 0.2s;
+  margin-top: 8px;
+}
+.submit-btn:hover { opacity: 0.88; }
+.submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.thankyou {
+  display: none;
+  text-align: center;
+  padding: 40px 20px;
+}
+.thankyou .icon {
+  font-size: 56px;
+  margin-bottom: 16px;
+  display: block;
+}
+.thankyou h2 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+.thankyou p { font-size: 15px; color: var(--text2); line-height: 1.7; }
+
+.required-note { font-size: 11px; color: var(--text3); margin-top: 6px; }
+.error-msg { font-size: 12px; color: #c0392b; margin-top: 6px; display: none; }
+
+.sending-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(255,255,255,0.85);
+  z-index: 99;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--green);
+  font-family: 'Tajawal', sans-serif;
+}
+.spinner {
+  width: 36px; height: 36px;
+  border: 3px solid var(--green-light);
+  border-top-color: var(--green);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
 @keyframes spin { to { transform: rotate(360deg); } }
-
-.sheets-badge { display: inline-flex; align-items: center; gap: 6px; background: #e8f5e9; color: #2e7d32; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 99px; margin-bottom: 16px; }
 </style>
 </head>
 <body>
 
-<div class="sidebar">
-  <div class="logo">تقييمات <span>العملاء</span></div>
-  <button class="nav-btn active" onclick="showPage('dashboard',this)">📊 لوحة التحكم</button>
-  <button class="nav-btn" onclick="showPage('reviews',this)">💬 التقييمات</button>
-  <button class="nav-btn" onclick="showPage('links',this)">🔗 روابط واتساب</button>
+<div class="sending-overlay" id="sending-overlay">
+  <div class="spinner"></div>
+  <span>جاري إرسال تقييمك...</span>
 </div>
 
-<div class="main">
+<div class="container">
 
-  <!-- Dashboard -->
-  <div class="page active" id="page-dashboard">
-    <div class="page-title">لوحة التحكم</div>
-    <div class="page-sub" id="dash-sub">جميع الفروع</div>
-
-    <div class="sheets-badge">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="#2e7d32"><path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm-7 14H7v-2h5v2zm5-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-      متصل بـ Google Sheets
-      <button onclick="loadData()" style="background:none;border:none;cursor:pointer;color:#2e7d32;font-size:11px;font-weight:700;padding:0;font-family:'Tajawal',sans-serif;">🔄 تحديث</button>
+  <div id="form-section">
+    <div class="header">
+      <div class="logo-circle">🍽</div>
+      <h1>كيف كانت تجربتك؟</h1>
+      <p>رأيك يهمنا ويساعدنا نتحسن لك</p>
+      <div class="branch-badge" id="branch-label">AVINDAR LOUNGE</div>
     </div>
 
-    <div class="branch-tabs" id="branch-tabs-dash">
-      <button class="branch-tab active" onclick="setDashBranch('',this)">كل الفروع</button>
-      <button class="branch-tab" onclick="setDashBranch('1',this)">AVINDAR LOUNGE</button>
-      <button class="branch-tab" onclick="setDashBranch('2',this)">AVINDAR OLD TOWEN</button>
-      <button class="branch-tab" onclick="setDashBranch('3',this)">الفرع 3</button>
-      <button class="branch-tab" onclick="setDashBranch('4',this)">الفرع 4</button>
-      <button class="branch-tab" onclick="setDashBranch('5',this)">الفرع 5</button>
+    <div class="progress-wrap">
+      <div class="progress-label" id="progress-label">السؤال 1 من 5</div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:20%"></div></div>
     </div>
 
-    <div class="stats-grid" id="stats-grid">
-      <div style="grid-column:1/-1" class="loading-row"><div class="spinner"></div> جاري تحميل البيانات من Google Sheets...</div>
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-      <div class="card">
-        <div class="card-title">التقييم العام</div>
-        <div id="overall-bars"></div>
+    <div class="card" id="q1">
+      <div class="q-number">السؤال 1</div>
+      <div class="q-text">كيف تقيّم تجربتك العامة في الفرع؟</div>
+      <div class="star-row" id="stars-overall">
+        <button class="star-btn" onclick="setStar('overall',1)">★</button>
+        <button class="star-btn" onclick="setStar('overall',2)">★</button>
+        <button class="star-btn" onclick="setStar('overall',3)">★</button>
+        <button class="star-btn" onclick="setStar('overall',4)">★</button>
+        <button class="star-btn" onclick="setStar('overall',5)">★</button>
       </div>
-      <div class="card">
-        <div class="card-title">جودة الطعام</div>
-        <div id="food-bars"></div>
+      <div class="star-label" id="label-overall"></div>
+      <div class="error-msg" id="err-q1">الرجاء اختيار تقييم</div>
+    </div>
+
+    <div class="card" id="q2">
+      <div class="q-number">السؤال 2</div>
+      <div class="q-text">كيف كانت جودة الطعام؟</div>
+      <div class="star-row" id="stars-food">
+        <button class="star-btn" onclick="setStar('food',1)">★</button>
+        <button class="star-btn" onclick="setStar('food',2)">★</button>
+        <button class="star-btn" onclick="setStar('food',3)">★</button>
+        <button class="star-btn" onclick="setStar('food',4)">★</button>
+        <button class="star-btn" onclick="setStar('food',5)">★</button>
+      </div>
+      <div class="star-label" id="label-food"></div>
+      <div class="error-msg" id="err-q2">الرجاء اختيار تقييم</div>
+    </div>
+
+    <div class="card" id="q3">
+      <div class="q-number">السؤال 3</div>
+      <div class="q-text">كيف كانت سرعة الخدمة؟</div>
+      <div class="choices" id="choices-speed">
+        <button class="choice-btn" onclick="setChoice('speed', 'سريعة جداً', this)"><span class="check"></span> سريعة جداً</button>
+        <button class="choice-btn" onclick="setChoice('speed', 'مناسبة', this)"><span class="check"></span> مناسبة</button>
+        <button class="choice-btn" onclick="setChoice('speed', 'بطيئة نوعاً ما', this)"><span class="check"></span> بطيئة نوعاً ما</button>
+        <button class="choice-btn" onclick="setChoice('speed', 'بطيئة جداً', this)"><span class="check"></span> بطيئة جداً</button>
+      </div>
+      <div class="error-msg" id="err-q3">الرجاء اختيار إجابة</div>
+    </div>
+
+    <div class="card" id="q4">
+      <div class="q-number">السؤال 4</div>
+      <div class="q-text">ما الذي أعجبك؟ <span style="font-size:13px;font-weight:400;color:var(--text3)">(يمكن اختيار أكثر من واحد)</span></div>
+      <div class="choices" id="choices-liked">
+        <button class="choice-btn multi" onclick="toggleMulti('liked', 'جودة الطعام', this)"><span class="check"></span> جودة الطعام</button>
+        <button class="choice-btn multi" onclick="toggleMulti('liked', 'سرعة الخدمة', this)"><span class="check"></span> سرعة الخدمة</button>
+        <button class="choice-btn multi" onclick="toggleMulti('liked', 'تعامل الموظفين', this)"><span class="check"></span> تعامل الموظفين</button>
+        <button class="choice-btn multi" onclick="toggleMulti('liked', 'نظافة المكان', this)"><span class="check"></span> نظافة المكان</button>
+        <button class="choice-btn multi" onclick="toggleMulti('liked', 'الأسعار', this)"><span class="check"></span> الأسعار</button>
       </div>
     </div>
 
-    <div class="card" style="margin-top:14px">
-      <div class="card-title">سرعة الخدمة</div>
-      <div id="speed-bars"></div>
+    <div class="card" id="q5">
+      <div class="q-number">السؤال 5</div>
+      <div class="q-text">هل ستوصي أصدقاءك بزيارة الفرع؟</div>
+      <div class="nps-row" id="nps-row">
+        <button class="nps-btn" onclick="setNPS(1,this)">1</button>
+        <button class="nps-btn" onclick="setNPS(2,this)">2</button>
+        <button class="nps-btn" onclick="setNPS(3,this)">3</button>
+        <button class="nps-btn" onclick="setNPS(4,this)">4</button>
+        <button class="nps-btn" onclick="setNPS(5,this)">5</button>
+        <button class="nps-btn" onclick="setNPS(6,this)">6</button>
+        <button class="nps-btn" onclick="setNPS(7,this)">7</button>
+        <button class="nps-btn" onclick="setNPS(8,this)">8</button>
+        <button class="nps-btn" onclick="setNPS(9,this)">9</button>
+        <button class="nps-btn" onclick="setNPS(10,this)">10</button>
+      </div>
+      <div class="nps-labels"><span>لن أوصي</span><span>بالتأكيد سأوصي</span></div>
+      <div class="error-msg" id="err-q5">الرجاء اختيار رقم</div>
     </div>
 
     <div class="card">
-      <div class="card-title">ما أعجب العملاء</div>
-      <div id="liked-bars"></div>
+      <div class="q-number">ملاحظات إضافية <span style="font-weight:400;color:var(--text3)">(اختياري)</span></div>
+      <div class="q-text" style="font-size:15px">هل لديك أي تعليق أو اقتراح؟</div>
+      <textarea id="comment" placeholder="شاركنا رأيك..."></textarea>
     </div>
+
+    <button class="submit-btn" onclick="submitReview()">إرسال التقييم</button>
+    <p class="required-note" style="text-align:center;margin-top:12px">تقييمك مجهول الهوية تماماً ولن يتم مشاركة بياناتك</p>
   </div>
 
-  <!-- Reviews -->
-  <div class="page" id="page-reviews">
-    <div class="page-title">التقييمات</div>
-    <div class="page-sub">جميع تقييمات العملاء من Google Sheets</div>
-    <div class="filter-row">
-      <select id="rev-branch" onchange="renderReviews()">
-        <option value="">كل الفروع</option>
-        <option value="1">AVINDAR LOUNGE</option><option value="2">AVINDAR OLD TOWEN</option>
-        <option value="3">الفرع 3</option><option value="4">الفرع 4</option>
-        <option value="5">الفرع 5</option>
-      </select>
-      <select id="rev-sort" onchange="renderReviews()">
-        <option value="new">الأحدث أولاً</option>
-        <option value="high">الأعلى تقييماً</option>
-        <option value="low">الأدنى تقييماً</option>
-      </select>
-      <button class="btn btn-refresh" onclick="loadData().then(renderReviews)">🔄 تحديث</button>
-    </div>
-    <div class="card" id="reviews-list"><div class="loading-row"><div class="spinner"></div> جاري التحميل...</div></div>
-  </div>
-
-  <!-- WhatsApp Links -->
-  <div class="page" id="page-links">
-    <div class="page-title">روابط واتساب</div>
-    <div class="page-sub">أرسل الرابط للعملاء بعد كل طلب</div>
-    <div id="links-content"></div>
+  <div class="thankyou" id="thankyou-section">
+    <span class="icon">🎉</span>
+    <h2>شكراً لك!</h2>
+    <p>تقييمك وصلنا وسيساعدنا على تقديم خدمة أفضل لك في كل زيارة.</p>
+    <p style="margin-top:12px;color:var(--green);font-weight:700">نتطلع لاستقبالك مجدداً ✨</p>
   </div>
 
 </div>
@@ -171,211 +352,101 @@ select, .btn { font-family: 'Tajawal', sans-serif; font-size: 13px; padding: 8px
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby6qb-IPqQnjnciUCdr7pirOSRgXu_2QvSnGmfqHzG2pANks_FbnoUNOQSs1GRJD6fjpA/exec';
 
-let allReviews = [];
-let dashBranch = '';
+const STAR_LABELS = ['', 'سيء جداً', 'سيء', 'مقبول', 'جيد', 'ممتاز'];
+const answers = { overall: 0, food: 0, speed: null, liked: [], nps: 0, comment: '' };
 
-const BRANCH_NAMES = {
-  '1': 'AVINDAR LOUNGE',
-  '2': 'AVINDAR OLD TOWEN',
-  '3': 'الفرع 3',
-  '4': 'الفرع 4',
-  '5': 'الفرع 5'
-};
-function branchName(b) { return BRANCH_NAMES[b] || 'الفرع ' + b; }
+const params = new URLSearchParams(location.search);
+const branch = params.get('branch') || '1';
+const BRANCH_NAMES = {'1':'AVINDAR LOUNGE','2':'AVINDAR OLD TOWEN'};
+document.getElementById('branch-label').textContent = BRANCH_NAMES[branch] || 'الفرع ' + branch;
 
-function parseReviews(rows) {
-  if (!rows || rows.length < 2) return [];
-  const headers = rows[0];
-  return rows.slice(1).map(row => {
-    const obj = {};
-    headers.forEach((h, i) => obj[h] = row[i] || '');
-    return {
-      date:    obj['التاريخ'] || obj['date'] || '',
-      overall: parseInt(obj['التقييم العام'] || obj['overall']) || 0,
-      food:    parseInt(obj['الطعام'] || obj['food']) || 0,
-      speed:   obj['الخدمة'] || obj['service'] || obj['speed'] || '',
-      liked:   (obj['ما أعجبك'] || obj['liked'] || '').split(' | ').filter(Boolean),
-      nps:     parseInt(obj['التوصية'] || obj['nps']) || 0,
-      comment: obj['التعليق'] || obj['comment'] || '',
-      branch:  String(obj['الفرع'] || obj['branch'] || '1'),
-    };
-  }).filter(r => r.overall > 0);
+function setStar(key, val) {
+  answers[key] = val;
+  const btns = document.querySelectorAll(`#stars-${key} .star-btn`);
+  btns.forEach((b, i) => b.classList.toggle('active', i < val));
+  document.getElementById('label-' + key).textContent = STAR_LABELS[val];
+  document.getElementById('label-' + key).style.color = val >= 4 ? 'var(--green)' : val >= 3 ? '#d4a017' : '#c0392b';
+  updateProgress();
 }
 
-async function loadData() {
-  try {
-    const res = await fetch(SCRIPT_URL + '?t=' + Date.now());
-    const rows = await res.json();
-    allReviews = parseReviews(rows);
-  } catch(e) {
-    allReviews = [];
+function setChoice(key, val, btn) {
+  answers[key] = val;
+  const parent = btn.closest('.choices');
+  parent.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  btn.querySelector('.check').textContent = '✓';
+  parent.querySelectorAll('.choice-btn:not(.selected) .check').forEach(c => c.textContent = '');
+  updateProgress();
+}
+
+function toggleMulti(key, val, btn) {
+  btn.classList.toggle('selected');
+  if (btn.classList.contains('selected')) {
+    btn.querySelector('.check').textContent = '✓';
+    if (!answers[key].includes(val)) answers[key].push(val);
+  } else {
+    btn.querySelector('.check').textContent = '';
+    answers[key] = answers[key].filter(v => v !== val);
   }
-  renderDashboard();
-  return allReviews;
 }
 
-function showPage(p, btn) {
-  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
-  document.getElementById('page-' + p).classList.add('active');
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  if (p === 'dashboard') renderDashboard();
-  if (p === 'reviews') renderReviews();
-  if (p === 'links') renderLinks();
+function setNPS(val, btn) {
+  answers.nps = val;
+  document.querySelectorAll('#nps-row .nps-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  updateProgress();
 }
 
-function setDashBranch(b, btn) {
-  dashBranch = b;
-  document.querySelectorAll('#branch-tabs-dash .branch-tab').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('dash-sub').textContent = b ? branchName(b) : 'جميع الفروع';
-  renderDashboard();
+function updateProgress() {
+  const filled = [answers.overall > 0, answers.food > 0, answers.speed !== null, answers.nps > 0].filter(Boolean).length;
+  const pct = Math.round(((filled + 1) / 5) * 100);
+  document.getElementById('progress-fill').style.width = Math.min(pct, 100) + '%';
+  const labels = ['السؤال 1 من 5', 'السؤال 2 من 5', 'السؤال 3 من 5', 'السؤال 4 من 5', 'اكتمل التقييم'];
+  document.getElementById('progress-label').textContent = labels[Math.min(filled, 4)];
 }
 
-function starHtml(val) {
-  let s = '';
-  for (let i = 1; i <= 5; i++) s += `<span style="color:${i <= val ? '#f0b429' : '#ddd'}">★</span>`;
-  return s;
-}
+function submitReview() {
+  let valid = true;
+  if (!answers.overall) { document.getElementById('err-q1').style.display = 'block'; valid = false; } else document.getElementById('err-q1').style.display = 'none';
+  if (!answers.food) { document.getElementById('err-q2').style.display = 'block'; valid = false; } else document.getElementById('err-q2').style.display = 'none';
+  if (!answers.speed) { document.getElementById('err-q3').style.display = 'block'; valid = false; } else document.getElementById('err-q3').style.display = 'none';
+  if (!answers.nps) { document.getElementById('err-q5').style.display = 'block'; valid = false; } else document.getElementById('err-q5').style.display = 'none';
+  if (!valid) { document.querySelector('.error-msg[style*="block"]').closest('.card').scrollIntoView({behavior:'smooth', block:'center'}); return; }
 
-function scoreBadge(pct) {
-  if (pct >= 85) return '<span class="badge b-excellent">ممتاز</span>';
-  if (pct >= 70) return '<span class="badge b-good">جيد جداً</span>';
-  if (pct >= 50) return '<span class="badge b-avg">جيد</span>';
-  return '<span class="badge b-low">يحتاج تحسين</span>';
-}
+  answers.comment = document.getElementById('comment').value.trim();
+  answers.branch = branch;
+  answers.date = new Date().toLocaleString('ar-SA');
 
-function avg(arr) {
-  if (!arr.length) return 0;
-  return arr.reduce((a, b) => a + b, 0) / arr.length;
-}
+  document.getElementById('sending-overlay').style.display = 'flex';
 
-function renderDashboard() {
-  const reviews = dashBranch ? allReviews.filter(r => r.branch === dashBranch) : allReviews;
+  const payload = {
+    overall: answers.overall,
+    food: answers.food,
+    speed: answers.speed,
+    liked: answers.liked.join(' | '),
+    nps: answers.nps,
+    comment: answers.comment,
+    branch: answers.branch,
+    date: answers.date
+  };
 
-  if (!reviews.length) {
-    document.getElementById('stats-grid').innerHTML = '<div class="empty-state" style="grid-column:1/-1">لا توجد تقييمات بعد. أرسل الرابط للعملاء من قسم "روابط واتساب"</div>';
-    ['overall-bars','food-bars','speed-bars','liked-bars'].forEach(id => document.getElementById(id).innerHTML = '');
-    return;
-  }
-
-  const overallAvg = avg(reviews.map(r => r.overall)).toFixed(1);
-  const foodAvg = avg(reviews.map(r => r.food)).toFixed(1);
-  const promoters = reviews.filter(r => r.nps >= 9).length;
-  const detractors = reviews.filter(r => r.nps <= 6).length;
-  const nps = Math.round(((promoters - detractors) / reviews.length) * 100);
-
-  document.getElementById('stats-grid').innerHTML = `
-    <div class="stat-card"><div class="stat-lbl">عدد التقييمات</div><div class="stat-val">${reviews.length}</div></div>
-    <div class="stat-card"><div class="stat-lbl">التقييم العام</div><div class="stat-val">${overallAvg}</div><div class="stat-sub">${starHtml(Math.round(overallAvg))}</div></div>
-    <div class="stat-card"><div class="stat-lbl">جودة الطعام</div><div class="stat-val">${foodAvg}</div><div class="stat-sub">${starHtml(Math.round(foodAvg))}</div></div>
-    <div class="stat-card"><div class="stat-lbl">مؤشر التوصية (NPS)</div><div class="stat-val" style="color:${nps>=50?'var(--green)':nps>=0?'var(--amber)':'var(--red)'}">${nps}</div><div class="stat-sub">من ${reviews.length} عميل</div></div>
-  `;
-
-  function buildStarBars(key, containerId) {
-    const counts = [0,0,0,0,0];
-    reviews.forEach(r => { if (r[key] >= 1 && r[key] <= 5) counts[r[key]-1]++; });
-    const max = Math.max(...counts) || 1;
-    document.getElementById(containerId).innerHTML = [5,4,3,2,1].map(n => `
-      <div class="bar-row">
-        <div class="bar-label">${starHtml(n)}</div>
-        <div class="bar-track"><div class="bar-fill" style="width:${Math.round((counts[n-1]/max)*100)}%"></div></div>
-        <div class="bar-count">${counts[n-1]}</div>
-      </div>`).join('');
-  }
-  buildStarBars('overall', 'overall-bars');
-  buildStarBars('food', 'food-bars');
-
-  const speedOpts = ['سريعة جداً','مناسبة','بطيئة نوعاً ما','بطيئة جداً'];
-  const speedCounts = {};
-  speedOpts.forEach(o => speedCounts[o] = 0);
-  reviews.forEach(r => { if (r.speed) speedCounts[r.speed] = (speedCounts[r.speed] || 0) + 1; });
-  const maxSpd = Math.max(...Object.values(speedCounts)) || 1;
-  document.getElementById('speed-bars').innerHTML = speedOpts.map(o => `
-    <div class="bar-row">
-      <div class="bar-label">${o}</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${Math.round((speedCounts[o]/maxSpd)*100)}%;background:${o==='سريعة جداً'?'var(--green)':o==='مناسبة'?'var(--green-mid)':o==='بطيئة نوعاً ما'?'#d4a017':'var(--red)'}"></div></div>
-      <div class="bar-count">${speedCounts[o]}</div>
-    </div>`).join('');
-
-  const likedAll = [];
-  reviews.forEach(r => { if (Array.isArray(r.liked)) r.liked.forEach(l => { if(l) likedAll.push(l); }); });
-  const likedCount = {};
-  likedAll.forEach(l => likedCount[l] = (likedCount[l] || 0) + 1);
-  const likedSorted = Object.entries(likedCount).sort((a,b) => b[1]-a[1]);
-  const maxLiked = likedSorted[0]?.[1] || 1;
-  document.getElementById('liked-bars').innerHTML = likedSorted.length
-    ? likedSorted.map(([label, count]) => `
-      <div class="bar-row">
-        <div class="bar-label">${label}</div>
-        <div class="bar-track"><div class="bar-fill" style="width:${Math.round((count/maxLiked)*100)}%"></div></div>
-        <div class="bar-count">${count}</div>
-      </div>`).join('')
-    : '<div class="empty-state">لا بيانات</div>';
-}
-
-function renderReviews() {
-  const branch = document.getElementById('rev-branch').value;
-  const sort = document.getElementById('rev-sort').value;
-  let reviews = [...allReviews];
-  if (branch) reviews = reviews.filter(r => r.branch === branch);
-  if (sort === 'new') reviews = reviews.reverse();
-  else if (sort === 'high') reviews.sort((a,b) => b.overall - a.overall);
-  else reviews.sort((a,b) => a.overall - b.overall);
-
-  const el = document.getElementById('reviews-list');
-  if (!reviews.length) { el.innerHTML = '<div class="empty-state">لا توجد تقييمات</div>'; return; }
-
-  el.innerHTML = reviews.map(r => {
-    const pct = Math.round(((r.overall + r.food) / 10) * 100);
-    const liked = Array.isArray(r.liked) && r.liked.length ? r.liked.map(l => `<span class="tag">${l}</span>`).join('') : '';
-    return `<div class="review-card">
-      <div class="review-meta">
-        ${scoreBadge(pct)}
-        <span class="tag">${branchName(r.branch || '?')}</span>
-        <span style="font-size:11px;color:var(--text3)">${r.date}</span>
-      </div>
-      <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:13px;margin-bottom:6px">
-        <span>التجربة: ${starHtml(r.overall)}</span>
-        <span>الطعام: ${starHtml(r.food)}</span>
-        <span style="color:var(--text2)">الخدمة: ${r.speed || '--'}</span>
-        <span style="color:var(--text2)">التوصية: ${r.nps}/10</span>
-      </div>
-      ${liked ? `<div style="margin-bottom:6px">${liked}</div>` : ''}
-      ${r.comment ? `<div class="review-comment">"${r.comment}"</div>` : ''}
-    </div>`;
-  }).join('');
-}
-
-function renderLinks() {
-  const base = location.href.replace('لوحة_النتائج.html','تقييم_العميل.html').replace('manager.html','تقييم_العميل.html');
-  document.getElementById('links-content').innerHTML = [1,2,3,4,5].map(b => `
-    <div class="card" style="margin-bottom:12px">
-      <div style="font-size:15px;font-weight:700;margin-bottom:10px">${branchName(String(b))}</div>
-      <div class="link-box">${base}?branch=${b}</div>
-      <div style="display:flex;gap:8px">
-        <button class="btn" onclick="copyLink('${base}?branch=${b}',this)">نسخ الرابط</button>
-        <button class="wa-btn" style="flex:1" onclick="openWA('${base}?branch=${b}',${b})">
-          إرسال على واتساب
-        </button>
-      </div>
-    </div>`).join('');
-}
-
-function copyLink(url, btn) {
-  navigator.clipboard.writeText(url).then(() => {
-    btn.textContent = '✓ تم النسخ';
-    setTimeout(() => btn.textContent = 'نسخ الرابط', 2000);
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+  .then(() => {
+    document.getElementById('sending-overlay').style.display = 'none';
+    document.getElementById('form-section').style.display = 'none';
+    document.getElementById('thankyou-section').style.display = 'block';
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  })
+  .catch(() => {
+    document.getElementById('sending-overlay').style.display = 'none';
+    alert('حدث خطأ في الإرسال، يرجى المحاولة مجدداً');
   });
 }
-
-function openWA(url, branch) {
-  const msg = encodeURIComponent(`شكراً لزيارتك ${branchName(String(branch))} 🙏\nرأيك يهمنا! قيّم تجربتك في 30 ثانية:\n${url}`);
-  window.open('https://wa.me/?text=' + msg, '_blank');
-}
-
-loadData();
-setInterval(loadData, 60000);
 </script>
 </body>
 </html>
